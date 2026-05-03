@@ -1,75 +1,60 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-primary: #f5a623;
-  --color-brand-secondary: #00d4aa;
-  --color-brand-subtle: rgba(245, 166, 35, 0.15);
+  --color-bg-page: #0c0d12;
+  --color-bg-surface: #16171f;
+  --color-accent: #6c63ff;
   
-  --color-bg-page: #0a0a0f;
-  --color-bg-surface: #111118;
-  --color-bg-elevated: #18181f;
-  --color-bg-subtle: rgba(255, 255, 255, 0.05);
-
-  --color-text-primary: #e8e8f0;
-  --color-text-secondary: #c2c2cc;
-  --color-text-muted: #7a7a8c;
-
-  --color-border-default: rgba(255, 255, 255, 0.08);
-  --color-border-strong: rgba(255, 255, 255, 0.15);
+  --color-note-yellow: #fef08a;
+  --color-note-blue: #bfdbfe;
+  --color-note-green: #bbf7d0;
+  --color-note-pink: #fbcfe8;
+  --color-note-purple: #ddd6fe;
+  --color-note-orange: #fed7aa;
 
   --font-display: 'Syne', sans-serif;
-  --font-body: 'Syne', sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --font-body: 'Inter', sans-serif;
 }
 
 @layer base {
-  :root {
-    /* Notes Colors - Dark Theme Adjustments */
-    --note-default: #18181f;
-    --note-yellow: #2a220b;
-    --note-blue: #0b1a2a;
-    --note-green: #0b2a16;
-    --note-pink: #2a0b16;
-
-    --note-border-default: rgba(255, 255, 255, 0.08);
-    --note-border-yellow: rgba(245, 166, 35, 0.2);
-    --note-border-blue: rgba(0, 163, 255, 0.2);
-    --note-border-green: rgba(0, 212, 170, 0.2);
-    --note-border-pink: rgba(255, 107, 107, 0.2);
-  }
-
   body {
-    @apply bg-[var(--color-bg-page)] text-[var(--color-text-primary)] font-body antialiased;
-    background-image: radial-gradient(circle at 100% 0%, rgba(245,166,35,0.03) 0%, transparent 40%);
+    @apply bg-[var(--color-bg-page)] text-white font-body antialiased;
   }
-}
 
-@layer utilities {
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
+  .bento-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-auto-rows: 180px;
+    grid-auto-flow: dense;
+    gap: 1.5rem;
   }
-  .hide-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+
+  .note-card {
+    @apply relative overflow-hidden rounded-[32px] transition-all duration-500 border border-white/5 flex flex-col;
+    background-color: var(--color-bg-surface);
   }
-  
-  .masonry-grid {
-    column-count: 2;
-    column-gap: 1.5rem;
+
+  .note-card:hover {
+    @apply scale-[1.02] -translate-y-1 shadow-2xl shadow-black/40 border-white/10;
   }
-  @media (min-width: 768px) {
-    .masonry-grid {
-       column-count: 3;
-    }
+
+  .note-size-small { grid-row: span 1; grid-column: span 1; }
+  .note-size-medium { grid-row: span 2; grid-column: span 1; }
+  .note-size-large { grid-row: span 2; grid-column: span 2; }
+  .note-size-wide { grid-row: span 1; grid-column: span 2; }
+  .note-size-tall { grid-row: span 3; grid-column: span 1; }
+
+  @media (max-width: 640px) {
+    .note-size-large, .note-size-wide { grid-column: span 1; }
   }
-  @media (min-width: 1024px) {
-    .masonry-grid {
-       column-count: 4;
-    }
+
+  .glass-overlay {
+    @apply absolute inset-0 bg-black/20 backdrop-blur-[2px] transition-opacity duration-500 opacity-0 group-hover:opacity-100;
   }
-  
-  .masonry-item {
-    break-inside: avoid;
-    margin-bottom: 1.5rem;
-  }
+
+  /* Custom Scrollbar */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
 }

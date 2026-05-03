@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
-import { Note, NoteColor } from '../types/note.types';
+import { Note, NoteColor, TaskItem } from '../types/note.types';
 import { getNotes, setNotes, generateId } from '../utils/storage';
 
 export const useNotes = () => {
@@ -10,34 +10,26 @@ export const useNotes = () => {
 
   const titleRef = useRef<HTMLInputElement>(null);
 
-  // Initialize on mount
   useEffect(() => {
     setNotesState(getNotes());
     setIsInitialized(true);
   }, []);
 
-  // Sync to storage whenever notes change
   useEffect(() => {
     if (isInitialized) {
       setNotes(notes);
     }
   }, [notes, isInitialized]);
 
-  // Focus title when editingId changes
-  useEffect(() => {
-    if (editingId && titleRef.current) {
-        setTimeout(() => {
-            titleRef.current?.focus();
-        }, 50); // slight delay for transition
-    }
-  }, [editingId]);
-
-  const addNote = useCallback(() => {
+  const addNote = useCallback((type: 'text' | 'checklist' = 'text') => {
     const newNote: Note = {
       id: generateId(),
       title: '',
       content: '',
+      type,
+      tasks: type === 'checklist' ? [] : undefined,
       color: NoteColor.DEFAULT,
+      size: 'medium',
       createdAt: Date.now(),
       updatedAt: Date.now(),
       pinned: false
@@ -58,9 +50,7 @@ export const useNotes = () => {
 
   const deleteNote = useCallback((id: string) => {
     setNotesState(prev => prev.filter(n => n.id !== id));
-    if (editingId === id) {
-      setEditingId(null);
-    }
+    if (editingId === id) setEditingId(null);
   }, [editingId]);
 
   const togglePin = useCallback((id: string) => {
@@ -71,25 +61,40 @@ export const useNotes = () => {
     );
   }, []);
 
+  const addTask = useCallback((noteId: string, text: string) => {
+    const newTask: TaskItem = { id: generateId(), text, completed: false };
+    setNotesState(prev => prev.map(note => 
+      note.id === noteId ? { 
+        ...note, 
+        tasks: [...(note.tasks ?? []), newTask],
+        updatedAt: Date.now() 
+      } : note
+    ));
+  }, []);
+
+  const toggleTask = useCallback((noteId: string, taskId: string) => {
+    setNotesState(prev => prev.map(note => 
+      note.id === noteId ? { 
+        ...note, 
+        tasks: note.tasks?.map(t => t.id === taskId ? { ...t, completed: !t.completed } : t) ?? [],
+        updatedAt: Date.now() 
+      } : note
+    ));
+  }, []);
+
   const filteredNotes = useMemo(() => {
     const q = searchQuery.toLowerCase();
     const sorted = [...notes].sort((a, b) => {
-      // Sort pinned first, then by updated date
-      if (a.pinned === b.pinned) {
-        return b.updatedAt - a.updatedAt;
-      }
+      if (a.pinned === b.pinned) return b.updatedAt - a.updatedAt;
       return a.pinned ? -1 : 1;
     });
-
     if (!q) return sorted;
-
-    return sorted.filter(
-      n => n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q)
+    return sorted.filter(n => 
+      n.title.toLowerCase().includes(q) || n.content.toLowerCase().includes(q)
     );
   }, [notes, searchQuery]);
 
   const activeNote = useMemo(() => {
-    if (!editingId) return null;
     return notes.find(n => n.id === editingId) || null;
   }, [notes, editingId]);
 
@@ -105,6 +110,8 @@ export const useNotes = () => {
     addNote,
     updateNote,
     deleteNote,
-    togglePin
+    togglePin,
+    addTask,
+    toggleTask
   };
 };
