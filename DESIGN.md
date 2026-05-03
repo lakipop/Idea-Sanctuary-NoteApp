@@ -236,3 +236,11 @@ SENTRY_DSN=
 - [ ] List any patterns to specifically avoid in this project
 - [ ] List any third-party services with specific integration rules
 - [ ] List any performance budgets specific to this project
+
+
+---
+**Developer:** LSR Vidanaarachchi<br>
+**Portfolio:** [lakidev.me](https://lakidev.me/)<br>
+**GitHub:** [lakipop](https://github.com/lakipop)<br>
+
+*Developed for the SyntecXhub Internship Program*
