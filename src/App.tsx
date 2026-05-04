@@ -3,7 +3,7 @@ import {
   Plus, Search, Grid, Pin, Trash2, 
   CheckSquare, CheckCircle2, Circle, Sun, Moon,
   Type, Droplets, Palette, Image as ImageIcon,
-  Upload, X
+  Upload, X, Settings2, PenLine
 } from 'lucide-react';
 import { useNotes } from './hooks/useNotes';
 import { Note, NoteColor, NoteSize } from './types/note.types';
@@ -21,7 +21,7 @@ const UNSPLASH_PRESETS = [
 const FONT_COLORS = [
   { name: 'Default', value: 'inherit' },
   { name: 'Pure White', value: '#ffffff' },
-  { name: 'Pure Black', value: '#000000' },
+  { name: 'Pure Black', value: '#1a1a1a' },
   { name: 'Ochre', value: '#D4A044' },
   { name: 'Sage', value: '#82B2A7' },
   { name: 'Deep Sea', value: '#1e3a8a' },
@@ -97,7 +97,7 @@ export default function App() {
             </button>
             <button 
               onClick={() => { addNote('text'); openEditor(null); }}
-              className="px-6 py-3 rounded-full bg-[var(--color-accent)] text-white font-bold flex items-center gap-2 hover:scale-105 active:scale-95 transition-all shadow-lg shadow-[var(--color-accent)]/20"
+              className="px-6 py-3 rounded-full bg-[var(--color-accent)] text-white font-bold flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-md"
             >
               <Plus size={20} />
               <span>Brainstorm</span>
@@ -156,6 +156,18 @@ export default function App() {
 
 // --- Subcomponents ---
 
+const isColorLight = (color: NoteColor) => {
+  const lightColors = [
+    NoteColor.YELLOW, 
+    NoteColor.BLUE, 
+    NoteColor.GREEN, 
+    NoteColor.PINK, 
+    NoteColor.PURPLE, 
+    NoteColor.ORANGE
+  ];
+  return lightColors.includes(color);
+};
+
 function NoteCard({ note, isDarkMode, onClick, onTogglePin, onDelete }: any) {
   const getNoteColor = (color: NoteColor) => {
     switch (color) {
@@ -172,7 +184,7 @@ function NoteCard({ note, isDarkMode, onClick, onTogglePin, onDelete }: any) {
   };
 
   const textColor = note.fontColor === 'inherit' 
-    ? (isDarkMode ? '#ffffff' : 'var(--color-planner-dark)') 
+    ? (isColorLight(note.color) ? 'var(--color-planner-dark)' : (note.bgImage ? '#ffffff' : (isDarkMode ? '#ffffff' : 'var(--color-planner-dark)'))) 
     : note.fontColor;
 
   return (
@@ -188,7 +200,6 @@ function NoteCard({ note, isDarkMode, onClick, onTogglePin, onDelete }: any) {
         color: textColor
       }}
     >
-      {/* Removed blur from overlay */}
       {note.bgImage && <div className="absolute inset-0 bg-black/20 transition-all duration-500 group-hover:bg-black/10" />}
       
       <div className="relative z-10 p-8 h-full flex flex-col">
@@ -239,6 +250,7 @@ function NoteCard({ note, isDarkMode, onClick, onTogglePin, onDelete }: any) {
 
 function NoteEditor({ note, isDarkMode, onClose, onUpdate, titleRef, onToggleTask, onAddTask }: any) {
   const [newTaskText, setNewTaskText] = useState('');
+  const [activeMobileTab, setActiveMobileTab] = useState<'content' | 'settings'>('content');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const getNoteColor = (color: NoteColor) => {
@@ -267,31 +279,53 @@ function NoteEditor({ note, isDarkMode, onClose, onUpdate, titleRef, onToggleTas
   };
 
   const textColor = note.fontColor === 'inherit' 
-    ? (isDarkMode ? '#ffffff' : 'var(--color-planner-dark)') 
+    ? (isColorLight(note.color) ? 'var(--color-planner-dark)' : (note.bgImage ? '#ffffff' : (isDarkMode ? '#ffffff' : 'var(--color-planner-dark)'))) 
     : note.fontColor;
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-      {/* Reduced blur on backdrop */}
-      <div className="absolute inset-0 bg-black/70 backdrop-blur-md" onClick={onClose} />
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-md" onClick={onClose} />
       <div 
-        className={`relative w-full max-w-5xl max-h-[90vh] overflow-hidden rounded-[40px] flex flex-col md:flex-row shadow-2xl border border-white/10 transition-all duration-500 note-size-${note.size}`}
+        className="relative overflow-hidden w-full max-w-5xl h-[80vh] md:h-[85vh] rounded-[40px] flex flex-col md:flex-row shadow-2xl border border-white/10 transition-all duration-500 note-editor-modal"
         style={{ 
           backgroundColor: note.bgImage ? 'transparent' : getNoteColor(note.color),
           backgroundImage: note.bgImage ? `url(${note.bgImage})` : 'none',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          opacity: note.opacity,
-          color: textColor
+          opacity: note.opacity ?? 1
         }}
       >
-        {/* No blur overlay inside editor */}
-        {note.bgImage && <div className="absolute inset-0 bg-black/20 z-0" />}
+        {note.bgImage && <div className="absolute inset-0 bg-black/40 z-0" />}
+
+        {/* Header Toggle for Mobile */}
+        <div className="md:hidden relative z-50 flex border-b border-white/10 bg-black/20 backdrop-blur-sm">
+          <button 
+            onClick={() => setActiveMobileTab('content')}
+            className={`flex-1 py-4 flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest transition-all ${activeMobileTab === 'content' ? 'bg-[var(--color-accent)] text-white' : 'opacity-40'}`}
+          >
+            <PenLine size={16} /> Write
+          </button>
+          <button 
+            onClick={() => setActiveMobileTab('settings')}
+            className={`flex-1 py-4 flex items-center justify-center gap-2 font-bold text-xs uppercase tracking-widest transition-all ${activeMobileTab === 'settings' ? 'bg-[var(--color-accent)] text-white' : 'opacity-40'}`}
+          >
+            <Settings2 size={16} /> Config
+          </button>
+          <button 
+            onClick={onClose}
+            className="px-6 border-l border-white/10 opacity-60 hover:opacity-100 transition-opacity"
+          >
+            <X size={20} />
+          </button>
+        </div>
 
         {/* Left Side: Sidebar Settings */}
-        <div className="relative z-10 w-full md:w-72 border-r border-black/5 dark:border-white/5 p-8 flex flex-col gap-8 bg-black/10 backdrop-blur-sm overflow-y-auto custom-scrollbar">
+        <div 
+          className={`relative z-10 w-full md:w-72 border-r border-black/5 dark:border-white/5 p-8 flex flex-col gap-8 bg-black/10 backdrop-blur-sm overflow-y-auto custom-scrollbar ${activeMobileTab === 'settings' ? 'flex' : 'hidden md:flex'}`}
+          style={{ color: textColor }}
+        >
           <div>
-            <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-30 mb-4 block flex items-center gap-2">
+            <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40 mb-4 block flex items-center gap-2">
               <Grid size={12} /> Note Size
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -299,7 +333,7 @@ function NoteEditor({ note, isDarkMode, onClose, onUpdate, titleRef, onToggleTas
                 <button 
                   key={size}
                   onClick={() => onUpdate({ size })}
-                  className={`px-3 py-2 rounded-xl text-[10px] font-bold uppercase transition-all ${note.size === size ? 'bg-[var(--color-accent)] text-white' : 'bg-black/10 dark:bg-white/5 opacity-40 hover:opacity-100'}`}
+                  className={`px-3 py-2 rounded-xl text-[10px] font-bold uppercase transition-all ${note.size === size ? 'bg-[var(--color-accent)] text-white shadow-sm' : 'bg-black/10 dark:bg-white/5 opacity-40 hover:opacity-100'}`}
                 >
                   {size}
                 </button>
@@ -308,7 +342,7 @@ function NoteEditor({ note, isDarkMode, onClose, onUpdate, titleRef, onToggleTas
           </div>
 
           <div>
-            <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-30 mb-4 block flex items-center gap-2">
+            <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40 mb-4 block flex items-center gap-2">
               <Palette size={12} /> Palette
             </label>
             <div className="flex flex-wrap gap-2">
@@ -316,7 +350,7 @@ function NoteEditor({ note, isDarkMode, onClose, onUpdate, titleRef, onToggleTas
                 <button 
                   key={color}
                   onClick={() => onUpdate({ color, bgImage: undefined })}
-                  className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${note.color === color ? 'border-white scale-110' : 'border-transparent'}`}
+                  className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${note.color === color ? 'border-white scale-110 shadow-sm' : 'border-transparent'}`}
                   style={{ backgroundColor: color === 'DEFAULT' ? '#333' : `var(--color-note-${color.toLowerCase()})` }}
                 />
               ))}
@@ -324,7 +358,7 @@ function NoteEditor({ note, isDarkMode, onClose, onUpdate, titleRef, onToggleTas
           </div>
 
           <div>
-            <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-30 mb-4 block flex items-center gap-2">
+            <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40 mb-4 block flex items-center gap-2">
               <Type size={12} /> Font Color
             </label>
             <div className="flex flex-wrap gap-2">
@@ -332,7 +366,7 @@ function NoteEditor({ note, isDarkMode, onClose, onUpdate, titleRef, onToggleTas
                 <button 
                   key={fc.value}
                   onClick={() => onUpdate({ fontColor: fc.value })}
-                  className={`w-6 h-6 rounded-md border border-white/10 transition-transform hover:scale-110 ${note.fontColor === fc.value ? 'ring-2 ring-white scale-110' : ''}`}
+                  className={`w-6 h-6 rounded-md border border-white/10 transition-transform hover:scale-110 ${note.fontColor === fc.value ? 'ring-2 ring-white scale-110 shadow-sm' : ''}`}
                   style={{ backgroundColor: fc.value === 'inherit' ? '#666' : fc.value }}
                   title={fc.name}
                 />
@@ -341,22 +375,22 @@ function NoteEditor({ note, isDarkMode, onClose, onUpdate, titleRef, onToggleTas
           </div>
 
           <div>
-            <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-30 mb-4 block flex items-center gap-2">
-              <Droplets size={12} /> Opacity ({Math.round(note.opacity * 100)}%)
+            <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40 mb-4 block flex items-center gap-2">
+              <Droplets size={12} /> Opacity ({Math.round((note.opacity ?? 1) * 100)}%)
             </label>
             <input 
               type="range" 
               min="0.1" 
               max="1" 
               step="0.1" 
-              value={note.opacity}
+              value={note.opacity ?? 1}
               onChange={(e) => onUpdate({ opacity: parseFloat(e.target.value) })}
               className="w-full accent-[var(--color-accent)]"
             />
           </div>
 
           <div>
-            <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-30 mb-4 block flex items-center gap-2">
+            <label className="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40 mb-4 block flex items-center gap-2">
               <ImageIcon size={12} /> Backgrounds
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -378,14 +412,14 @@ function NoteEditor({ note, isDarkMode, onClose, onUpdate, titleRef, onToggleTas
               />
               <button 
                 onClick={() => fileInputRef.current?.click()}
-                className="aspect-video rounded-xl border border-dashed border-black/20 dark:border-white/20 flex flex-col items-center justify-center bg-white/5 opacity-40 hover:opacity-100"
+                className="aspect-video rounded-xl border border-dashed border-black/20 dark:border-white/20 flex flex-col items-center justify-center bg-white/5 opacity-40 hover:opacity-100 transition-all"
               >
                 <Upload size={16} />
                 <span className="text-[8px] font-bold mt-1">Upload</span>
               </button>
               <button 
                 onClick={() => onUpdate({ bgImage: undefined })}
-                className="aspect-video rounded-xl border border-dashed border-black/20 dark:border-white/20 flex items-center justify-center text-[10px] font-bold uppercase opacity-40 hover:opacity-100 hover:bg-white/5"
+                className="aspect-video rounded-xl border border-dashed border-black/20 dark:border-white/20 flex items-center justify-center text-[10px] font-bold uppercase opacity-40 hover:opacity-100 hover:bg-white/5 transition-all"
               >
                 Clear
               </button>
@@ -394,14 +428,22 @@ function NoteEditor({ note, isDarkMode, onClose, onUpdate, titleRef, onToggleTas
         </div>
 
         {/* Right Side: Main Content */}
-        <div className="relative z-10 flex-1 flex flex-col p-8 md:p-12 overflow-y-auto custom-scrollbar bg-transparent">
+        <div className={`relative z-10 flex-1 flex flex-col p-8 md:p-12 overflow-y-auto custom-scrollbar bg-transparent ${activeMobileTab === 'content' ? 'flex' : 'hidden md:flex'}`} style={{ color: textColor }}>
+          {/* Desktop Close Button */}
+          <button 
+            onClick={onClose}
+            className="hidden md:block absolute right-8 top-8 opacity-20 hover:opacity-100 transition-opacity"
+          >
+            <X size={24} />
+          </button>
+
           <input 
             ref={titleRef}
             type="text"
             value={note.title}
             onChange={(e) => onUpdate({ title: e.target.value })}
             placeholder={note.type === 'checklist' ? 'Brain List Title...' : 'Idea Title...'}
-            className="bg-transparent border-none outline-none text-5xl font-black tracking-tighter mb-8 placeholder:opacity-10 font-display"
+            className="bg-transparent border-none outline-none text-4xl md:text-5xl font-black tracking-tighter mb-8 placeholder:opacity-40 font-display"
             style={{ color: textColor }}
           />
 
@@ -412,7 +454,7 @@ function NoteEditor({ note, isDarkMode, onClose, onUpdate, titleRef, onToggleTas
                   <button onClick={() => onToggleTask(task.id)} className="text-[var(--color-accent)]">
                     {task.completed ? <CheckCircle2 size={24} /> : <Circle size={24} className="opacity-20 group-hover:opacity-100" />}
                   </button>
-                  <span className={`text-xl font-medium ${task.completed ? 'line-through opacity-30' : ''}`} style={{ color: textColor }}>{task.text}</span>
+                  <span className={`text-lg md:text-xl font-medium ${task.completed ? 'line-through opacity-30' : ''}`}>{task.text}</span>
                 </div>
               ))}
               <div className="flex items-center gap-4 pt-4 border-t border-black/5 dark:border-white/5">
@@ -428,7 +470,7 @@ function NoteEditor({ note, isDarkMode, onClose, onUpdate, titleRef, onToggleTas
                     }
                   }}
                   placeholder="Add item..."
-                  className="flex-1 bg-transparent border-none outline-none text-xl font-medium placeholder:opacity-10"
+                  className="flex-1 bg-transparent border-none outline-none text-lg md:text-xl font-medium placeholder:opacity-40"
                   style={{ color: textColor }}
                 />
               </div>
@@ -438,7 +480,7 @@ function NoteEditor({ note, isDarkMode, onClose, onUpdate, titleRef, onToggleTas
               value={note.content}
               onChange={(e) => onUpdate({ content: e.target.value })}
               placeholder="Spill your creative thoughts..."
-              className="flex-1 bg-transparent border-none outline-none text-xl font-medium leading-relaxed resize-none placeholder:opacity-10 min-h-[300px]"
+              className="flex-1 bg-transparent border-none outline-none text-lg md:text-xl font-medium leading-relaxed resize-none placeholder:opacity-30 min-h-[300px]"
               style={{ color: textColor }}
             />
           )}
@@ -446,7 +488,7 @@ function NoteEditor({ note, isDarkMode, onClose, onUpdate, titleRef, onToggleTas
           <div className="mt-12 flex justify-end gap-4">
             <button 
               onClick={onClose}
-              className="px-8 py-3 rounded-full bg-black dark:bg-white font-bold text-white dark:text-black hover:scale-105 active:scale-95 transition-all shadow-xl"
+              className="px-10 py-3 rounded-full bg-[var(--color-accent)] text-white font-bold hover:opacity-90 active:scale-95 transition-all shadow-md"
             >
               Secure Idea
             </button>
