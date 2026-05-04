@@ -69,38 +69,36 @@ export default function App() {
           <p className="text-current opacity-40 font-medium uppercase tracking-[0.2em] text-[10px] md:text-xs">Unleash Your Creative Mind</p>
         </div>
 
-        <div className="grid grid-cols-2 lg:flex items-center gap-4 w-full lg:w-auto">
-          <div className="flex items-center gap-2 flex-1">
-            <button 
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              className="w-10 h-10 shrink-0 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-            >
-              {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
+        <div className="flex items-center gap-2 md:gap-4 w-full lg:w-auto overflow-x-auto pb-2 md:pb-0 no-scrollbar">
+          <button 
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className="w-10 h-10 md:w-12 md:h-12 shrink-0 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 flex items-center justify-center hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+          >
+            {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
 
-            <div className="relative flex-1 group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 opacity-60 group-focus-within:text-[var(--color-accent)] transition-colors" size={16} />
-              <input 
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search..."
-                className="w-full bg-black/5 dark:bg-white/5 border-2 border-transparent rounded-full py-2.5 pl-10 pr-4 outline-none focus:border-[var(--color-accent)]/30 focus:bg-transparent transition-all font-medium text-xs text-current placeholder:text-current placeholder:opacity-30"
-              />
-            </div>
+          <div className="relative flex-1 min-w-[140px] md:min-w-[200px] lg:w-80 group shrink-0">
+            <Search className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 opacity-60 group-focus-within:text-[var(--color-accent)] transition-colors" size={16} />
+            <input 
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search..."
+              className="w-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 rounded-full py-2 md:py-3 pl-9 md:pl-12 pr-4 outline-none focus:border-[var(--color-accent)] transition-all font-medium text-xs md:text-sm text-current placeholder:text-current placeholder:opacity-30"
+            />
           </div>
 
-          <div className="flex items-center gap-2 flex-1 lg:flex-initial">
+          <div className="flex items-center gap-2 md:gap-3 shrink-0">
             <button 
               onClick={() => { addNote('checklist'); openEditor(null); }}
-              className="flex-1 lg:flex-initial px-4 py-2.5 rounded-full bg-black/5 dark:bg-white/5 font-bold flex items-center justify-center gap-2 hover:bg-black/10 dark:hover:bg-white/10 transition-all text-xs"
+              className="px-4 py-2 md:py-3 rounded-full bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 font-bold flex items-center justify-center gap-2 hover:bg-black/10 dark:hover:bg-white/10 transition-all text-xs md:text-sm"
             >
               <CheckSquare size={16} className="opacity-60" />
               <span className="opacity-60">List</span>
             </button>
             <button 
               onClick={() => { addNote('text'); openEditor(null); }}
-              className="flex-1 lg:flex-initial px-4 py-2.5 rounded-full bg-[var(--color-accent)] text-white font-bold flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-md text-xs"
+              className="px-4 py-2 md:py-3 rounded-full bg-[var(--color-accent)] text-white font-bold flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-md text-xs md:text-sm"
             >
               <Plus size={16} />
               <span>Idea</span>
