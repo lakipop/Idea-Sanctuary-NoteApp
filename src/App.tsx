@@ -203,44 +203,48 @@ function NoteCard({ note, isDarkMode, onClick, onTogglePin, onDelete }: any) {
     >
       {note.bgImage && <div className="absolute inset-0 bg-black/20 transition-all duration-500 group-hover:bg-black/10" />}
       
-      <div className="relative z-10 p-8 h-full flex flex-col">
-        <div className="flex justify-between items-start mb-4">
-          <h3 className="text-2xl font-black tracking-tight leading-tight uppercase font-display max-w-[80%] break-words">
+      <div className="relative z-10 p-5 md:p-8 h-full flex flex-col">
+        <div className="flex justify-between items-start mb-3 md:mb-4">
+          <h3 className="text-lg md:text-2xl font-black tracking-tight leading-tight uppercase font-display max-w-[80%] break-words">
             {note.title || (note.type === 'checklist' ? 'Brain List' : 'Idea')}
           </h3>
           <button 
             onClick={(e) => { e.stopPropagation(); onTogglePin(); }}
             className={`transition-colors ${note.pinned ? 'text-[var(--color-accent)]' : 'opacity-20 hover:opacity-100'}`}
           >
-            <Pin size={18} fill={note.pinned ? 'currentColor' : 'none'} />
+            <Pin className="w-4 h-4 md:w-[18px] md:h-[18px]" fill={note.pinned ? 'currentColor' : 'none'} />
           </button>
         </div>
 
         {note.type === 'checklist' ? (
-          <div className="space-y-2 overflow-hidden flex-1">
+          <div className="space-y-1.5 md:space-y-2 overflow-hidden flex-1">
             {note.tasks?.slice(0, 5).map((task: any) => (
-              <div key={task.id} className="flex items-center gap-3">
-                {task.completed ? <CheckCircle2 size={16} className="shrink-0" /> : <Circle size={16} className="shrink-0 opacity-40" />}
-                <span className={`text-sm font-medium truncate ${task.completed ? 'line-through opacity-40' : ''}`}>{task.text}</span>
+              <div key={task.id} className="flex items-center gap-2 md:gap-3">
+                {task.completed ? (
+                  <CheckCircle2 className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0" />
+                ) : (
+                  <Circle className="w-3.5 h-3.5 md:w-4 md:h-4 shrink-0 opacity-40" />
+                )}
+                <span className={`text-xs md:text-sm font-medium truncate ${task.completed ? 'line-through opacity-40' : ''}`}>{task.text}</span>
               </div>
             ))}
             {note.tasks && note.tasks.length > 5 && (
-              <p className="text-[10px] font-bold uppercase tracking-widest opacity-40">+{note.tasks.length - 5} more ideas</p>
+              <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest opacity-40">+{note.tasks.length - 5} more ideas</p>
             )}
           </div>
         ) : (
-          <p className="text-sm font-medium line-clamp-6 opacity-60 flex-1 break-words leading-relaxed">
+          <p className="text-xs md:text-sm font-medium line-clamp-6 opacity-60 flex-1 break-words leading-relaxed">
             {note.content || 'Start writing...'}
           </p>
         )}
 
-        <div className="mt-6 flex justify-between items-center pt-6 border-t border-black/5 dark:border-white/5">
-          <span className="text-[10px] font-bold uppercase tracking-widest opacity-40">
+        <div className="mt-4 md:mt-6 flex justify-between items-center pt-4 md:pt-6 border-t border-black/5 dark:border-white/5">
+          <span className="text-[9px] md:text-[10px] font-bold uppercase tracking-widest opacity-40">
             {new Date(note.updatedAt).toLocaleDateString([], { month: 'short', day: 'numeric' })}
           </span>
           <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
             <button onClick={(e) => { e.stopPropagation(); onDelete(); }} className="text-red-400/60 hover:text-red-400">
-              <Trash2 size={16} />
+              <Trash2 className="w-3.5 h-3.5 md:w-4 md:h-4" />
             </button>
           </div>
         </div>

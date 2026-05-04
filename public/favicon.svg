@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Background Circle -->
+  <circle cx="50" cy="50" r="48" fill="#0c0d12"/>
+  
+  <!-- Abstract Sanctuary / Lightbulb Structure -->
+  <path d="M50 20 L75 45 L75 75 L25 75 L25 45 Z" fill="none" stroke="#D4A044" stroke-width="4" stroke-linejoin="round"/>
+  
+  <!-- Internal 'Light' / 'Brain' Lines -->
+  <path d="M50 35 L50 65 M40 50 L60 50" stroke="#D4A044" stroke-width="3" stroke-linecap="round"/>
+  
+  <!-- Base of the Sanctuary -->
+  <rect x="35" y="75" width="30" height="5" rx="1" fill="#D4A044"/>
+  
+  <!-- Glow Effect -->
+  <circle cx="50" cy="48" r="12" fill="#D4A044" fill-opacity="0.2"/>
+</svg>
