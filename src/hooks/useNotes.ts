@@ -30,6 +30,8 @@ export const useNotes = () => {
       tasks: type === 'checklist' ? [] : undefined,
       color: NoteColor.DEFAULT,
       size: 'medium',
+      opacity: 1,
+      fontColor: 'inherit',
       createdAt: Date.now(),
       updatedAt: Date.now(),
       pinned: false

@@ -1,9 +1,15 @@
 @import "tailwindcss";
 
 @theme {
+  /* Provided Palette - noteappcolors.jpg */
+  --color-planner-bg: #F2F0E9;
+  --color-planner-yellow: #D4A044;
+  --color-planner-green: #82B2A7;
+  --color-planner-dark: #1E1E1E;
+
   --color-bg-page: #0c0d12;
   --color-bg-surface: #16171f;
-  --color-accent: #6c63ff;
+  --color-accent: var(--color-planner-yellow);
   
   --color-note-yellow: #fef08a;
   --color-note-blue: #bfdbfe;
@@ -11,6 +17,8 @@
   --color-note-pink: #fbcfe8;
   --color-note-purple: #ddd6fe;
   --color-note-orange: #fed7aa;
+  --color-note-ochre: var(--color-planner-yellow);
+  --color-note-sage: var(--color-planner-green);
 
   --font-display: 'Syne', sans-serif;
   --font-body: 'Inter', sans-serif;
@@ -18,7 +26,15 @@
 
 @layer base {
   body {
-    @apply bg-[var(--color-bg-page)] text-white font-body antialiased;
+    @apply transition-colors duration-500 antialiased font-body;
+  }
+
+  body.dark {
+    @apply bg-[var(--color-bg-page)] text-white;
+  }
+
+  body.light {
+    @apply bg-[var(--color-planner-bg)] text-[var(--color-planner-dark)];
   }
 
   .bento-grid {
@@ -34,8 +50,17 @@
     background-color: var(--color-bg-surface);
   }
 
+  body.light .note-card {
+    @apply border-black/5 shadow-sm;
+    background-color: white;
+  }
+
   .note-card:hover {
     @apply scale-[1.02] -translate-y-1 shadow-2xl shadow-black/40 border-white/10;
+  }
+
+  body.light .note-card:hover {
+    @apply shadow-xl shadow-black/10 border-black/10;
   }
 
   .note-size-small { grid-row: span 1; grid-column: span 1; }
@@ -43,13 +68,10 @@
   .note-size-large { grid-row: span 2; grid-column: span 2; }
   .note-size-wide { grid-row: span 1; grid-column: span 2; }
   .note-size-tall { grid-row: span 3; grid-column: span 1; }
+  .note-size-half-tall { grid-row: span 1.5; grid-column: span 1; } /* Approximate half tall */
 
   @media (max-width: 640px) {
     .note-size-large, .note-size-wide { grid-column: span 1; }
-  }
-
-  .glass-overlay {
-    @apply absolute inset-0 bg-black/20 backdrop-blur-[2px] transition-opacity duration-500 opacity-0 group-hover:opacity-100;
   }
 
   /* Custom Scrollbar */
@@ -57,4 +79,7 @@
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
   ::-webkit-scrollbar-thumb:hover { background: rgba(255, 255, 255, 0.2); }
+
+  body.light ::-webkit-scrollbar-thumb { background: rgba(0, 0, 0, 0.1); }
+  body.light ::-webkit-scrollbar-thumb:hover { background: rgba(0, 0, 0, 0.2); }
 }

@@ -40,7 +40,13 @@ graph TD
     Editor --> ColorPicker[Accent Colors]
 ```
 
-## 5. File Structure
+## 5. Architectural Highlights
+- **Dual-Theme Engine**: Implements a synchronized Light/Dark mode system mapped to the CSS `:body` class.
+- **Masonry Grid Engine**: Uses a dynamic `grid-auto-flow: dense` algorithm with 6 pre-defined card sizes (Small to Half-Tall).
+- **Aesthetic Overrides**: State-driven overrides for `opacity` and `fontColor` are applied directly to the card's inline style object.
+- **Background System**: Integrated Unsplash preset picker and a **Base64 Local Image Upload** system. No-blur policy for visual clarity.
+
+## 6. File Structure
 ```text
 /src
  ├── /components              # Distinct functional boundaries

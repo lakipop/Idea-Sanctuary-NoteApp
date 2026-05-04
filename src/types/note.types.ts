@@ -5,10 +5,12 @@ export enum NoteColor {
   GREEN = 'GREEN',
   PINK = 'PINK',
   PURPLE = 'PURPLE',
-  ORANGE = 'ORANGE'
+  ORANGE = 'ORANGE',
+  OCHRE = 'OCHRE', // From noteappcolors.jpg
+  SAGE = 'SAGE'    // From noteappcolors.jpg
 }
 
-export type NoteSize = 'small' | 'medium' | 'large' | 'wide' | 'tall';
+export type NoteSize = 'small' | 'medium' | 'large' | 'wide' | 'tall' | 'half-tall';
 
 export interface TaskItem {
   id: string;
@@ -25,6 +27,8 @@ export interface Note {
   color: NoteColor;
   bgImage?: string | undefined; // Unsplash URL or preset
   size: NoteSize;
+  opacity: number; // New: 0 to 1
+  fontColor: string; // New: hex or CSS var
   createdAt: number;
   updatedAt: number;
   pinned: boolean;
