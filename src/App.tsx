@@ -63,44 +63,47 @@ export default function App() {
   return (
     <div className="min-h-screen flex flex-col p-6 md:p-10 transition-colors duration-500">
       {/* Header */}
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
-        <div>
-          <h1 className="text-5xl font-black tracking-tighter mb-2 font-display">IDEA SANCTUARY</h1>
-          <p className="text-current opacity-40 font-medium uppercase tracking-[0.2em] text-xs">Unleash Your Creative Mind</p>
+      <header className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 mb-12">
+        <div className="shrink-0">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-2 font-display">IDEA SANCTUARY</h1>
+          <p className="text-current opacity-40 font-medium uppercase tracking-[0.2em] text-[10px] md:text-xs">Unleash Your Creative Mind</p>
         </div>
 
-        <div className="flex items-center gap-4 w-full md:w-auto">
-          <button 
-            onClick={() => setIsDarkMode(!isDarkMode)}
-            className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
-          >
-            {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-          </button>
+        <div className="grid grid-cols-2 lg:flex items-center gap-4 w-full lg:w-auto">
+          <div className="flex items-center gap-2 flex-1">
+            <button 
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              className="w-10 h-10 shrink-0 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center hover:bg-black/10 dark:hover:bg-white/10 transition-colors"
+            >
+              {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
 
-          <div className="relative flex-1 md:w-80 group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 opacity-20 group-focus-within:text-[var(--color-accent)] transition-colors" size={18} />
-            <input 
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search your brain..."
-              className="w-full bg-black/5 dark:bg-white/5 border border-transparent rounded-full py-3 pl-12 pr-6 outline-none focus:border-[var(--color-accent)]/50 transition-all font-medium"
-            />
+            <div className="relative flex-1 group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 opacity-60 group-focus-within:text-[var(--color-accent)] transition-colors" size={16} />
+              <input 
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search..."
+                className="w-full bg-black/5 dark:bg-white/5 border-2 border-transparent rounded-full py-2.5 pl-10 pr-4 outline-none focus:border-[var(--color-accent)]/30 focus:bg-transparent transition-all font-medium text-xs text-current placeholder:text-current placeholder:opacity-30"
+              />
+            </div>
           </div>
-          <div className="flex gap-2">
+
+          <div className="flex items-center gap-2 flex-1 lg:flex-initial">
             <button 
               onClick={() => { addNote('checklist'); openEditor(null); }}
-              className="w-12 h-12 rounded-full bg-black/5 dark:bg-white/5 flex items-center justify-center hover:bg-black/10 dark:hover:bg-white/10 transition-colors opacity-60"
-              title="Add Checklist"
+              className="flex-1 lg:flex-initial px-4 py-2.5 rounded-full bg-black/5 dark:bg-white/5 font-bold flex items-center justify-center gap-2 hover:bg-black/10 dark:hover:bg-white/10 transition-all text-xs"
             >
-              <CheckSquare size={20} />
+              <CheckSquare size={16} className="opacity-60" />
+              <span className="opacity-60">List</span>
             </button>
             <button 
               onClick={() => { addNote('text'); openEditor(null); }}
-              className="px-6 py-3 rounded-full bg-[var(--color-accent)] text-white font-bold flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-md"
+              className="flex-1 lg:flex-initial px-4 py-2.5 rounded-full bg-[var(--color-accent)] text-white font-bold flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all shadow-md text-xs"
             >
-              <Plus size={20} />
-              <span>Brainstorm</span>
+              <Plus size={16} />
+              <span>Idea</span>
             </button>
           </div>
         </div>
