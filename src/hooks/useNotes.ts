@@ -3,6 +3,7 @@ import { Note, NoteColor, TaskItem } from '../types/note.types';
 import { getNotes, setNotes, generateId } from '../utils/storage';
 
 export const useNotes = () => {
+  // Using useState to manage the list of notes
   const [notes, setNotesState] = useState<Note[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -11,11 +12,13 @@ export const useNotes = () => {
   const titleRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    //  Load notes from localStorage on initial mount
     setNotesState(getNotes());
     setIsInitialized(true);
   }, []);
 
   useEffect(() => {
+    //  Persist notes to localStorage whenever the list changes
     if (isInitialized) {
       setNotes(notes);
     }
