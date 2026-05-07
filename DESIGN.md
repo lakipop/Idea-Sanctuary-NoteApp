@@ -1,5 +1,5 @@
-# DESIGN.md — Idea Sanctuary (Notes App)
-# Location: /Syntecxhub_Notes-App/DESIGN.md
+# DESIGN.md — Idea Sanctuary
+# Location: /Idea-Sanctuary/DESIGN.md
 # Purpose: Project-specific design tokens and creative aesthetic rules.
 
 ---
@@ -52,8 +52,8 @@ Derived from `noteappcolors.jpg`.
 ```
 
 ---
-**Developer:** LSR Vidanaarachchi<br>
+**Developer:** LakiDev (LSR Vidanaarachchi)<br>
 **Portfolio:** [lakidev.me](https://lakidev.me/)<br>
 **GitHub:** [lakipop](https://github.com/lakipop)<br>
 
-*Developed for the SyntecXhub Internship Program*
+*A Personal Portfolio Project*

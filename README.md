@@ -1,11 +1,11 @@
-# Syntecxhub Notes App
+# Idea Sanctuary
 
 ![React](https://img.shields.io/badge/React-19.0.0-blue?style=for-the-badge&logo=react)
 ![Vite](https://img.shields.io/badge/Vite-6.0-purple?style=for-the-badge&logo=vite)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind-4.0-38B2AC?style=for-the-badge&logo=tailwind-css)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.7-blue?style=for-the-badge&logo=typescript)
 
-A playful, tactile Markdown-compatible note-taking application built for the **Syntecxhub Internship Program (Week 1)**. This project focuses on browser-native persistence and advanced layout rendering.
+A playful, tactile Markdown-compatible note-taking application designed for capturing thoughts with a premium masonry experience. This project was developed as part of my personal portfolio to demonstrate advanced CSS layout techniques and robust browser-native persistence.
 
 ## 🚀 Features
 
@@ -26,8 +26,8 @@ A playful, tactile Markdown-compatible note-taking application built for the **S
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/lakipop/Syntecxhub_Notes-App.git
-   cd Syntecxhub_Notes-App
+   git clone https://github.com/lakipop/Idea-Sanctuary.git
+   cd Idea-Sanctuary
    ```
 
 2. **Install dependencies**
@@ -45,8 +45,8 @@ A playful, tactile Markdown-compatible note-taking application built for the **S
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
-**Developer:** LSR Vidanaarachchi<br>
+**Developer:** LakiDev (LSR Vidanaarachchi)<br>
 **Portfolio:** [lakidev.me](https://lakidev.me/)<br>
 **GitHub:** [lakipop](https://github.com/lakipop)<br>
 
-*Developed for the SyntecXhub Internship Program*
+*A Personal Portfolio Project*

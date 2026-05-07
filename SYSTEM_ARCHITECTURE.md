@@ -22,52 +22,52 @@ graph TD
     
     G[App Mount] -->|Reads| E
     E -->|JSON Parse| C
-    C -->|Hydrates| D
-```
+# SYSTEM_ARCHITECTURE.md — Idea Sanctuary
+# Location: /Idea-Sanctuary/SYSTEM_ARCHITECTURE.md
+# Purpose: Technical breakdown of the note-taking engine and masonry grid.
 
-## 4. Component Hierarchy
-```mermaid
-graph TD
-    App --> Toolbar[NoteToolbar]
-    App --> Grid[NotesGrid]
-    App --> Editor[NoteEditor Modal]
-    
-    Toolbar --> Search[Search Filter]
-    Grid --> Card[NoteCard]
-    
-    Editor --> TextField[Title Input]
-    Editor --> Markdown[Content Textarea]
-    Editor --> ColorPicker[Accent Colors]
-```
+The Idea Sanctuary application implements an entirely local, persistence-first architecture. Instead of relying on a network connection, the state is tightly coupled to the browser's `localStorage` HTML5 API. The UI scales efficiently using CSS column features for a masonry format.
 
-## 5. Architectural Highlights
-- **Dual-Theme Engine**: Implements a synchronized Light/Dark mode system mapped to the CSS `:body` class.
-- **Masonry Grid Engine**: Uses a dynamic `grid-auto-flow: dense` algorithm with 6 pre-defined card sizes (Small to Half-Tall).
-- **Aesthetic Overrides**: State-driven overrides for `opacity` and `fontColor` are applied directly to the card's inline style object.
-- **Background System**: Integrated Unsplash preset picker and a **Base64 Local Image Upload** system. No-blur policy for visual clarity.
+---
 
-## 6. File Structure
+## 1. Data Layer & Persistence Strategy
+- **Primary Store:** `localStorage` (JSON serialized).
+- **Initialization:** The `useNotes` hook initializes state by attempting to parse the `laki_notes` key.
+- **Sync Mechanism:** A dedicated `useEffect` in the hook monitors the `notes` state. Any mutation (add/edit/delete/pin) triggers an immediate `localStorage.setItem` call.
+
+## 2. Component Hierarchy (Masonry Logic)
+- **Grid Container:** Uses `column-count` and `column-gap` for fluid masonry layout.
+- **Note Cards:** Uses `break-inside: avoid` to prevent cards from splitting across columns.
+- **Dynamic Orientation:** Cards support 6 size classes (Small to Tall) via dynamic CSS classes.
+
+## 3. Modal State & Accessibility
+- **Note Editor:** Controlled via `editingId`. When set, the `NoteEditor` component renders via a portal/overlay.
+- **Focus Management:** Uses `useRef` (titleRef). Upon mounting, the editor executes a side-effect to focus the title input for immediate user interaction.
+
+## 4. Performance Optimizations
+- **Search Filtering:** The `filteredNotes` array is derived using `useMemo`, ensuring the search logic only re-runs if the `searchQuery` or `notes` array changes.
+- **Memoized Callbacks:** All CRUD operations are wrapped in `useCallback` to prevent unnecessary re-renders of the child `NoteCard` components.
+
+---
+
+## 5. Directory Structure
 ```text
-/src
- ├── /components              # Distinct functional boundaries
- │   ├── NoteCard.tsx         # Hover states, pin options
- │   ├── NoteEditor.tsx       # Intercepting modal logic
- │   ├── NotesGrid.tsx        # Masonry column generation
- │   └── NoteToolbar.tsx      # Entry and global search
- ├── /hooks
- │   └── useNotes.ts          # State array management & filters
- ├── /utils
- │   └── storage.ts           # Try/Catch wrapper for localStorage
- ├── /types
- │   └── note.types.ts        # Interfaces and Color Enums
- ├── App.tsx                  # Global orchestration layer
- ├── index.css                # CSS Columns and Theme Colors
- └── main.tsx                 # Bootstrapper
+src/
+├── components/
+│   ├── NoteCard.tsx     # Specialized card with color/size logic
+│   ├── NoteEditor.tsx   # Modal for deep editing
+│   └── ...
+├── hooks/
+│   └── useNotes.ts      # Core state engine & sync logic
+├── types/
+│   └── note.types.ts    # Enums for Color/Size/Type
+└── utils/
+    └── storage.ts       # LocalStorage abstraction layer
 ```
 
 ---
-**Developer:** LSR Vidanaarachchi<br>
+**Developer:** LakiDev (LSR Vidanaarachchi)<br>
 **Portfolio:** [lakidev.me](https://lakidev.me/)<br>
 **GitHub:** [lakipop](https://github.com/lakipop)<br>
 
-*Developed for the SyntecXhub Internship Program*
+*A Personal Portfolio Project*
