@@ -146,7 +146,7 @@ export default function App() {
 
       {/* Footer Branding */}
       <footer className="mt-20 py-8 border-t border-black/5 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-6">
-        <p className="text-xs md:text-sm font-bold uppercase tracking-widest opacity-60">Â© 2026 LSR Vidanaarachchi</p>
+        <p className="text-xs md:text-sm font-bold uppercase tracking-widest opacity-60">© 2026 LSR Vidanaarachchi</p>
         <div className="flex flex-wrap items-center gap-3">
           <a 
             href="https://lakidev.me" 
