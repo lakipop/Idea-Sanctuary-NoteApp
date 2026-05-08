@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { 
   Plus, Search, Grid, Pin, Trash2, 
   CheckSquare, CheckCircle2, Circle, Sun, Moon,
@@ -6,7 +6,7 @@ import {
   Upload, X, Settings2, PenLine
 } from 'lucide-react';
 import { useNotes } from './hooks/useNotes';
-import { Note, NoteColor, NoteSize } from './types/note.types';
+import { Note, NoteColor } from './types/note.types';
 
 const UNSPLASH_PRESETS = [
   'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&auto=format&fit=crop&q=60',
